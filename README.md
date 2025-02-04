@@ -34,5 +34,10 @@ Uvařeno je online kuchařka, kde uživatelé mohou přidávat, prohlížet a ho
 ## 📊ER Diagram
 ![image](https://github.com/user-attachments/assets/e7684f77-dcae-4c41-a63c-e1cff9ea9ff3)
 
+## 🚀 Jak spustit projekt
+1. Naklonujte
+git clone https://github.com/tvoje_jmeno/uvareno.git
+2.
+
 ## 📜Licence
 - Tento projekt je licenzovaný [MIT License](LICENSE).
