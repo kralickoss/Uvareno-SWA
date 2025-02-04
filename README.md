@@ -35,9 +35,14 @@ Uvařeno je online kuchařka, kde uživatelé mohou přidávat, prohlížet a ho
 ![image](https://github.com/user-attachments/assets/e7684f77-dcae-4c41-a63c-e1cff9ea9ff3)
 
 ## 🚀 Jak spustit projekt
-1. Naklonujte
-git clone https://github.com/tvoje_jmeno/uvareno.git
-2.
+
+1. **Naklonujte repozitář**:
+   ```bash
+   git clone https://github.com/tvoje_jmeno/uvareno.git
+2. **Importujte databázi** do phpmyadmin.
+3. **Upravte**: "db_connection.php" s údaji k vaší databázi
+4. **Spusťte projekt** na lokálním serveru.
+5. **Otevřte**: "index.php" v prohlížeci 
 
 ## 📜Licence
 - Tento projekt je licenzovaný [MIT License](LICENSE).
