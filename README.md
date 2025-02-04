@@ -6,8 +6,6 @@ Uvařeno je online kuchařka, kde uživatelé mohou přidávat, prohlížet a ho
 - 📜 Přidávání receptů
 - 🔍 Vyhledávání receptů
 - 👀 Zobrazení detailu receptu
-- ⭐ Hodnocení receptů
-- 💬 Komentování receptů
 
 ## 🛠 Použité technologie
 - **Frontend:** HTML, CSS, JavaScript
