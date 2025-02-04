@@ -38,7 +38,7 @@ Uvařeno je online kuchařka, kde uživatelé mohou přidávat, prohlížet a ho
 
 1. **Naklonujte repozitář**:
    ```bash
-   git clone https://github.com/kralickoss/uvareno-swa.git
+   git clone https://github.com/kralickoss/Uvareno-SWA.git
 2. **Importujte databázi** do phpmyadmin.
 3. **Upravte**: "db_connection.php" s údaji k vaší databázi
 4. **Spusťte projekt** na lokálním serveru.
