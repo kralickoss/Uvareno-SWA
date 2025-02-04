@@ -29,6 +29,7 @@ Uvařeno je online kuchařka, kde uživatelé mohou přidávat, prohlížet a ho
 │   ├── scripts.js        # JavaScript funkcionalita
 │   ├── styles-recepty.css # Styl pro recepty
 └── README.md             # Tento soubor
+```
 
 ## 📊ER Diagram
 ![image](https://github.com/user-attachments/assets/e7684f77-dcae-4c41-a63c-e1cff9ea9ff3)
