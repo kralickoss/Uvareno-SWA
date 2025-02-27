@@ -1,33 +1,32 @@
 <?php
 session_start();
-require 'db_connection.php'; // Připojení k databázi (soubor by měl obsahovat PDO připojení)
+require 'db_connection.php';
 
-$error = null; // Inicializace proměnné pro chybu
+$error = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email']);
     $password = $_POST['password'];
 
-    // Ověření, že e-mail a heslo nejsou prázdné
     if (empty($email) || empty($password)) {
         $error = "Vyplňte prosím všechna pole.";
     } else {
-        // Dotaz na uživatele podle e-mailu
         $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
         $stmt->execute(['email' => $email]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Ověření uživatele a hesla
-        if ($user && password_verify($password, $user['password_hash'])) { // Ověření hesla vůči hash hodnotě
-            // Nastavení relací
+        if ($user && password_verify($password, $user['password_hash'])) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['role'] = $user['role'];
 
-            // Přesměrování dle role uživatele
+            // Zvýšení počtu přihlášení
+            $updateLogin = $pdo->prepare("UPDATE user_stats SET login_count = login_count + 1 WHERE user_id = :user_id");
+            $updateLogin->execute(['user_id' => $user['id']]);
+
             if ($user['role'] === 'admin') {
-                header('Location: admin_dashboard.php'); // Administrátor přesměrován na dashboard
+                header('Location: admin_dashboard.php');
             } else {
-                header('Location: index.php'); // Ostatní uživatelé na hlavní stránku
+                header('Location: index.php');
             }
             exit;
         } else {
@@ -35,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="cs">

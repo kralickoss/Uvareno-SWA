@@ -1,37 +1,37 @@
 <?php
-// Zahrnutí připojení k databázi
+session_start();
 include('db_connection.php');
 
-// Kontrola, zda byl formulář odeslán
+if (!isset($_SESSION['user_id'])) {
+    die("Nepřihlášený uživatel! Přihlaste se.");
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Získání hodnot z formuláře a ošetření HTML speciálních znaků
     $title = htmlspecialchars($_POST['title']);
     $description = htmlspecialchars($_POST['description']);
     $ingredients = htmlspecialchars($_POST['ingredients']);
     $steps = htmlspecialchars($_POST['steps']);
-    $user_id = 1; // Placeholder pro ID uživatele (předpokládáme, že ID uživatele je 1)
+    $user_id = $_SESSION['user_id'];
 
-    // Příprava SQL dotazu pro vložení receptu
-    $sql = "INSERT INTO recipes (user_id, title, description, ingredients, steps, created_at) VALUES (:user_id, :title, :description, :ingredients, :steps, NOW())";
+    $sql = "INSERT INTO recipes (user_id, title, description, ingredients, steps, created_at) 
+            VALUES (:user_id, :title, :description, :ingredients, :steps, NOW())";
     $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        'user_id' => $user_id,
+        'title' => $title,
+        'description' => $description,
+        'ingredients' => $ingredients,
+        'steps' => $steps,
+    ]);
 
-    // Přiřazení hodnot do připravených parametrů
-    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-    $stmt->bindParam(':title', $title, PDO::PARAM_STR);
-    $stmt->bindParam(':description', $description, PDO::PARAM_STR);
-    $stmt->bindParam(':ingredients', $ingredients, PDO::PARAM_STR);
-    $stmt->bindParam(':steps', $steps, PDO::PARAM_STR);
+    // Zvýšení počtu přidaných receptů
+    $updateRecipes = $pdo->prepare("UPDATE user_stats SET recipe_count = recipe_count + 1 WHERE user_id = :user_id");
+    $updateRecipes->execute(['user_id' => $user_id]);
 
-    // Pokus o vykonání dotazu
-    if ($stmt->execute()) {
-        // Přesměrování na stránku s receptem, pokud bylo přidání úspěšné
-        header("Location: recipe.php");
-        exit();
-    } else {
-        // Zobrazení chybové zprávy, pokud došlo k problému při přidávání receptu
-        echo "Chyba při přidávání receptu.";
-    }
+    header("Location: recipe.php");
+    exit();
 }
+
 ?>
 
 <!DOCTYPE html>

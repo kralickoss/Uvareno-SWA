@@ -6,7 +6,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
 
-    // Validace vstupů
     if (empty($email) || empty($password) || empty($confirm_password)) {
         $error = "Vyplňte všechna pole.";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -15,20 +14,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = "Hesla se neshodují.";
     } else {
         try {
-            // Hash hesla
             $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
-            // Vložení uživatele do databáze
             $stmt = $pdo->prepare("INSERT INTO users (email, password_hash) VALUES (:email, :password)");
             $stmt->execute([
                 'email' => $email,
                 'password' => $hashed_password,
             ]);
 
+            // Získání ID nového uživatele
+            $newUserId = $pdo->lastInsertId();
+
+            // Vytvoření záznamu ve statistice uživatele
+            $insertStats = $pdo->prepare("INSERT INTO user_stats (user_id) VALUES (:user_id)");
+            $insertStats->execute(['user_id' => $newUserId]);
+
             header('Location: login.php?success=registered');
             exit;
         } catch (PDOException $e) {
-            // Zpracování chyb při duplikaci e-mailu
             if ($e->getCode() === '23000') {
                 $error = "E-mail již existuje.";
             } else {
@@ -37,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="cs">
